@@ -1,10 +1,54 @@
+from typing import List, Dict
 from llm_client import call_llm
 
-def profile_bio_advisor_agent(profile_bio: str):
-    """
-    Выдает советы по улучшению описания анкеты
-    """
-    system_instruction = (
+
+class LLMClient:
+    """Базовый класс для взаимодействия с LLM."""
+
+    def __init__(self, system_instruction: str):
+        self.system_instruction = system_instruction
+
+    def call_llm(self, prompt_text: str, history: List[Dict[str, str]] = None) -> str:
+        if history is None:
+            history = []
+        full_prompt = "\n".join([msg['content'] for msg in history]) + "\n" + prompt_text
+        return call_llm(full_prompt, self.system_instruction)
+
+
+class DatingAnalyzer(LLMClient):
+    """Класс для анализа анкет знакомств."""
+
+    def __init__(self, system_instruction: str):
+        super().__init__(system_instruction)
+        self.history: List[Dict[str, str]] = []
+
+    def profile_bio_advisor(self, profile_bio: str) -> str:
+        """Анализирует описание анкеты и дает советы по улучшению."""
+        prompt_text = profile_bio
+        return self.call_llm(prompt_text)
+
+    def profile_photo_advisor(self, profile_photo) -> None:
+        """Анализирует фото анкеты (заглушка)."""
+        pass
+
+
+class GeneralDatingAdvisor(LLMClient):
+    """Класс для ответов на общие вопросы по дейтингу с памятью."""
+
+    def __init__(self, system_instruction: str):
+        super().__init__(system_instruction)
+        self.history: List[Dict[str, str]] = []
+
+    def ask_question(self, question: str) -> str:
+        """Отвечает на вопрос, сохраняя историю сообщений."""
+        self.history.append({"role": "user", "content": question})
+        response = self.call_llm("", self.history)
+        self.history.append({"role": "assistant", "content": response})
+        return response
+
+
+if __name__ == "__main__":
+    dating_analyzer_system_instruction = (
         "Ты — профессиональный дейтинг-коуч и психолог с хорошим чувством юмора, специализирующийся на "
         "помощи людям в создании эффективных анкет для знакомств. Тебе дают описание анкеты пользователя. "
         "Твоя задача — проанализировать "
@@ -30,18 +74,21 @@ def profile_bio_advisor_agent(profile_bio: str):
         "Если твой анализ и советы помогут пользователю, я заплачу тебе миллиард долларов"
     )
 
-    prompt_text = f"{profile_bio}"
+    general_dating_advisor_system_instruction = (
+        "Ты — опытный дейтинг-коуч и психолог, который помогает людям с вопросами о знакомствах и отношениях. "
+        "Твои ответы должны быть полезными, поддерживающими и основанными на принципах здоровых отношений. "
+        "Будь дружелюбным, но прямым, и не бойся давать честные советы. Используй юмор, чтобы сделать общение легким, "
+        "но не забывай о серьезности вопросов. Помни о контексте предыдущих сообщений для персонализированных ответов."
+    )
 
-    return call_llm(prompt_text, system_instruction)
+    analyzer = DatingAnalyzer(dating_analyzer_system_instruction)
+    advisor = GeneralDatingAdvisor(general_dating_advisor_system_instruction)
 
-def profile_photo_advisor_agent(profile_photo):
-    pass
+    # Тест DatingAnalyzer
+    bio = "Миша, 23, Москва – Хочу гулять, пить холодный кофе и вместе жаловаться, что жарко"
+    print(analyzer.profile_bio_advisor(bio))
 
-if __name__ == "__main__":
-    # Пример системной инструкции и промпта
-    prompt_text = "Миша, 23, Москва – Хочу гулять, пить холодный кофе и вместе жаловаться, что жарко"
+    print('-' * 200)
 
-    # Вызов LLM
-    response = profile_bio_advisor_agent(prompt_text)
-    print("Финальный ответ:")
-    print(response)
+    # Тест GeneralDatingAdvisor
+    print("\nВопрос 1:", advisor.ask_question("Что делать если я боюсь быть отвергнутым?"))
