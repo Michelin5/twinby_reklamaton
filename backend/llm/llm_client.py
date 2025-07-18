@@ -15,11 +15,11 @@ except Exception as e:
 
 def call_llm(prompt_text, system_instruction):
     if giga_client is None: return "[ОШИБКА API] Клиент GigaChat не инициализирован."
-    print(f"\nВызов GigaChat: Системная инструкция (начало): {system_instruction[:100]}... Промпт: {prompt_text[:100]}...")
+    # print(f"\nВызов GigaChat: Системная инструкция (начало): {system_instruction[:100]}... Промпт: {prompt_text[:100]}...")
     try:
         messages = [SystemMessage(content=system_instruction), HumanMessage(content=prompt_text)]
         res = giga_client.invoke(messages)
-        print(f"GigaChat ответ (начало): {res.content[:100]}...")
+        # print(f"GigaChat ответ (начало): {res.content[:100]}...")
         return res.content.strip()
     except Exception as e:
         print(f"Ошибка вызова GigaChat API: {e}")
