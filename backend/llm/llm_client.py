@@ -8,6 +8,7 @@ load_dotenv(override=True)
 # --- Настройка GigaChat ---
 GIGA_CREDENTIALS = os.environ.get("GIGACHAT_TOKEN")
 giga_client = None
+
 try:
     giga_client = GigaChat(credentials=GIGA_CREDENTIALS, verify_ssl_certs=False, model="GigaChat-2")
 except Exception as e:
@@ -24,6 +25,9 @@ def call_llm(prompt_text, system_instruction):
     except Exception as e:
         print(f"Ошибка вызова GigaChat API: {e}")
         return f"[ОШИБКА API] {e}"
+
+def call_llm_image():
+    pass
 
 if __name__ == "__main__":
     # Пример системной инструкции и промпта
