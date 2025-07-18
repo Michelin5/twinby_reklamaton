@@ -1,0 +1,42 @@
+
+{% extends "base.html" %}
+
+{% block title %}500 - Ошибка сервера{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row min-vh-100 align-items-center">
+        <div class="col-lg-6 mx-auto text-center">
+            <div class="error-page">
+                <h1 class="display-1 fw-bold text-danger">500</h1>
+                <h2 class="mb-4">Ой! Что-то пошло не так</h2>
+                <p class="lead text-muted mb-4">
+                    Наш ИИ-ментор временно недоступен. 
+                    Мы уже работаем над исправлением проблемы.
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> На главную
+                    </a>
+                    <button onclick="location.reload()" class="btn btn-outline-primary">
+                        <i class="fas fa-sync"></i> Обновить
+                    </button>
+                </div>
+                
+                <div class="mt-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Попробуйте обновить страницу через несколько секунд</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    animation: fadeIn 0.8s ease-out;
+}
+</style>
+{% endblock %}

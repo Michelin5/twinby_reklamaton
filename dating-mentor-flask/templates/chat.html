@@ -1,0 +1,256 @@
+
+{% extends "base.html" %}
+
+{% block title %}Чат с ментором - ИИ-Ментор для дейтинга{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <div class="chat-sidebar">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">💬 Диалоги</h5>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            {% if chats %}
+            <div class="chat-list">
+                {% for chat in chats %}
+                <div class="chat-item {% if current_chat and current_chat.id == chat.id %}active{% endif %}"
+                     onclick="selectChat('{{ chat.id }}')">
+                    <div class="d-flex align-items-center">
+                        <div class="chat-avatar me-3">
+                            <i class="{{ chat.platform|get_platform_icon }}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ chat.girl_name }}</h6>
+                            <small class="text-muted">{{ chat.platform }}</small>
+                        </div>
+                    </div>
+                    <small class="text-muted">{{ chat.last_active|format_time }}</small>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-comments fa-3x mb-3"></i>
+                <p>Нет активных диалогов</p>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                    Создать первый
+                </button>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Main Chat Area -->
+        <div class="chat-main">
+            {% if current_chat %}
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="d-flex align-items-center">
+                    <div class="chat-avatar me-3">
+                        <i class="{{ current_chat.platform|get_platform_icon }}"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">{{ current_chat.girl_name }}</h5>
+                        <small class="text-muted">
+                            {{ current_chat.platform }}
+                            {% if current_chat.girl_description %}
+                            • {{ current_chat.girl_description }}
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Messages -->
+            <div class="chat-messages" id="chatMessages">
+                {% for message in messages %}
+                {% if message.sender_type == 'user' %}
+                <div class="message user">
+                    <div class="message-content">
+                        <small class="text-muted">Вы • {{ message.timestamp|format_time }}</small>
+                        <div class="message-bubble">
+                            {{ message.message_text }}
+                        </div>
+                    </div>
+                </div>
+                {% elif message.sender_type == 'girl' %}
+                <div class="message girl">
+                    <div class="d-flex">
+                        <div class="message-avatar">
+                            {{ current_chat.girl_name[0].upper() }}
+                        </div>
+                        <div class="message-content">
+                            <small class="text-muted">{{ current_chat.girl_name }} • {{ message.timestamp|format_time }}</small>
+                            <div class="message-bubble">
+                                {{ message.message_text }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% elif message.sender_type == 'mentor' %}
+                <div class="message mentor">
+                    <div class="d-flex">
+                        <div class="message-avatar bg-info">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <small class="text-muted">ИИ-Ментор • {{ message.timestamp|format_time }}</small>
+                            <div class="message-bubble">
+                                {{ message.message_text|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <!-- Message Input -->
+            <div class="chat-input">
+                <form id="sendMessageForm">
+                    <div class="mb-3">
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="sender_type" id="senderUser" value="user" checked>
+                            <label class="btn btn-outline-primary" for="senderUser">
+                                <i class="fas fa-user"></i> Ваше сообщение
+                            </label>
+                            
+                            <input type="radio" class="btn-check" name="sender_type" id="senderGirl" value="girl">
+                            <label class="btn btn-outline-primary" for="senderGirl">
+                                <i class="fas fa-venus"></i> Сообщение {{ current_chat.girl_name }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <textarea class="form-control" id="messageInput" rows="2" 
+                                  placeholder="Введите сообщение..." required></textarea>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-paper-plane"></i> Отправить
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <!-- No Chat Selected -->
+            <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="text-center">
+                    <i class="fas fa-comments fa-5x text-muted mb-4"></i>
+                    <h4>Выберите диалог или создайте новый</h4>
+                    <p class="text-muted">Начните анализировать свои переписки с помощью ИИ-ментора</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newChatModal">
+                        <i class="fas fa-plus"></i> Создать диалог
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- New Chat Modal -->
+<div class="modal fade" id="newChatModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">💕 Новый диалог</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createChatForm">
+                    <div class="mb-3">
+                        <label class="form-label">Имя девушки *</label>
+                        <input type="text" class="form-control" name="girl_name" required
+                               placeholder="Как ее зовут?">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Платформа знакомств *</label>
+                        <select class="form-select" name="platform" required>
+                            <option value="Tinder">Tinder</option>
+                            <option value="Bumble">Bumble</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="VK">VK</option>
+                            <option value="Telegram">Telegram</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Badoo">Badoo</option>
+                            <option value="Другое">Другое</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Описание (необязательно)</label>
+                        <textarea class="form-control" name="girl_description" rows="2"
+                                  placeholder="Информация о ней, которая поможет в анализе..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="submit" form="createChatForm" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Создать диалог
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.chat-item {
+    padding: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.chat-item:hover {
+    background: #F3F4F6;
+}
+
+.chat-item.active {
+    background: linear-gradient(135deg, rgba(255, 65, 108, 0.1), rgba(139, 92, 246, 0.1));
+    border-left: 3px solid var(--primary-color);
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.message.girl .message-bubble {
+    background: #F3F4F6;
+    color: var(--dark-color);
+}
+
+#messageInput {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    resize: none;
+}
+
+.chat-input button[type="submit"] {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+</style>
+
+<script>
+function selectChat(chatId) {
+    API.selectChat(chatId).then(result => {
+        if (result.success) {
+            window.location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

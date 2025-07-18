@@ -1,0 +1,257 @@
+
+{% extends "base.html" %}
+
+{% block title %}Главная - ИИ-Ментор для дейтинга{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 animate-fade-in">
+                    Прокачай свои навыки знакомств с <span class="text-gradient">ИИ-Ментором</span>
+                </h1>
+                <p class="lead mb-4 animate-fade-in-delay">
+                    Персонализированные советы, анализ переписки и помощь в создании привлекательного профиля
+                </p>
+                <div class="d-flex gap-3 animate-fade-in-delay-2">
+                    <a href="{{ url_for('profile') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Начать сейчас
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle"></i> Узнать больше
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image animate-float">
+                    <img src="{{ url_for('static', filename='img/hero-illustration.svg') }}" alt="Dating Mentor" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Что умеет наш ИИ-ментор?</h2>
+            <p class="lead text-muted">Комплексный подход к улучшению ваших навыков знакомств</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-primary">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4>Анализ профиля</h4>
+                    <p>Загрузите скриншот анкеты или введите текст - получите персонализированные советы по улучшению</p>
+                    <a href="{{ url_for('analyze') }}" class="btn btn-sm btn-outline-primary">
+                        Попробовать <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-success">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>Анализ переписки</h4>
+                    <p>Отправляйте сообщения из чата и получайте советы, как лучше отвечать и вести диалог</p>
+                    <a href="{{ url_for('chat') }}" class="btn btn-sm btn-outline-success">
+                        Начать чат <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-info">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h4>Советы по фото</h4>
+                    <p>Узнайте, какие фото работают лучше всего и как создать привлекательный визуальный профиль</p>
+                    <a href="{{ url_for('analyze') }}" class="btn btn-sm btn-outline-info">
+                        Получить советы <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-warning">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h4>Примеры сообщений</h4>
+                    <p>Получите персонализированные примеры первых сообщений для разных платформ</p>
+                </div>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-danger">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Психология общения</h4>
+                    <p>Понимайте подтекст сообщений и эмоциональную динамику диалога</p>
+                </div>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon bg-purple">
+                        <i class="fas fa-spell-check"></i>
+                    </div>
+                    <h4>Проверка грамматики</h4>
+                    <p>Автоматическая проверка текста на ошибки перед отправкой</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Как это работает?</h2>
+            <p class="lead text-muted">Простой процесс для максимального результата</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="step-number">1</div>
+                <h5>Создайте профиль</h5>
+                <p class="text-muted">Расскажите о себе, своих интересах и целях знакомств</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-number">2</div>
+                <h5>Загрузите данные</h5>
+                <p class="text-muted">Добавьте скриншоты анкеты или примеры переписки</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-number">3</div>
+                <h5>Получите анализ</h5>
+                <p class="text-muted">ИИ проанализирует и даст персональные рекомендации</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-number">4</div>
+                <h5>Применяйте советы</h5>
+                <p class="text-muted">Используйте рекомендации и улучшайте результаты</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-gradient-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Готовы улучшить свои навыки знакомств?</h2>
+        <p class="lead mb-4">Начните прямо сейчас - это бесплатно!</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-rocket"></i> Создать профиль
+        </a>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Что говорят пользователи</h2>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"Анализ моей анкеты помог понять, почему было мало мэтчей. После правок результаты улучшились в разы!"</p>
+                    <div class="testimonial-author">
+                        <strong>Александр, 28</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"Советы по переписке реально работают! Теперь диалоги не заканчиваются после пары сообщений"</p>
+                    <div class="testimonial-author">
+                        <strong>Мария, 25</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="stars mb-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <p>"Примеры сообщений помогли преодолеть страх первого сообщения. Супер персонализированно!"</p>
+                    <div class="testimonial-author">
+                        <strong>Дмитрий, 32</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Animation on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.feature-card, .testimonial-card').forEach(el => {
+    observer.observe(el);
+});
+</script>
+{% endblock %}

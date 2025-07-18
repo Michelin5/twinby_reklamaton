@@ -1,0 +1,72 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF416C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#FF416C;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circles -->
+  <circle cx="500" cy="100" r="150" fill="url(#gradient2)" opacity="0.5"/>
+  <circle cx="100" cy="300" r="100" fill="url(#gradient2)" opacity="0.5"/>
+  
+  <!-- Phone mockup -->
+  <rect x="200" y="50" width="200" height="350" rx="20" fill="white" stroke="url(#gradient1)" stroke-width="3"/>
+  <rect x="210" y="70" width="180" height="310" rx="15" fill="#f8f9fa"/>
+  
+  <!-- Dating app interface -->
+  <!-- Profile card -->
+  <rect x="225" y="90" width="150" height="200" rx="10" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <!-- Profile image placeholder -->
+  <rect x="235" y="100" width="130" height="130" rx="10" fill="url(#gradient2)"/>
+  
+  <!-- Name and info -->
+  <rect x="235" y="240" width="80" height="10" rx="5" fill="#e0e0e0"/>
+  <rect x="235" y="255" width="100" height="8" rx="4" fill="#f0f0f0"/>
+  <rect x="235" y="268" width="60" height="8" rx="4" fill="#f0f0f0"/>
+  
+  <!-- Action buttons -->
+  <circle cx="260" cy="310" r="20" fill="#ff4458" opacity="0.9"/>
+  <path d="M250 310 L270 310" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  
+  <circle cx="300" cy="310" r="20" fill="#10b981" opacity="0.9"/>
+  <path d="M290 310 L295 315 L310 300" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <circle cx="340" cy="310" r="20" fill="#3b82f6" opacity="0.9"/>
+  <path d="M332 302 L340 310 L348 302" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M332 318 L340 310 L348 318" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- AI Assistant bubble -->
+  <g transform="translate(420, 150)">
+    <rect x="0" y="0" width="150" height="80" rx="15" fill="white" stroke="url(#gradient1)" stroke-width="2"/>
+    <circle cx="15" cy="15" r="8" fill="url(#gradient1)"/>
+    <rect x="30" y="10" width="80" height="6" rx="3" fill="#e0e0e0"/>
+    <rect x="30" y="22" width="100" height="6" rx="3" fill="#e0e0e0"/>
+    <rect x="30" y="34" width="60" height="6" rx="3" fill="#e0e0e0"/>
+    
+    <!-- AI icon in circle -->
+    <text x="15" y="19" font-family="Arial" font-size="10" fill="white" text-anchor="middle">AI</text>
+    
+    <!-- Chat tail -->
+    <path d="M20 80 L20 95 L35 80" fill="white" stroke="url(#gradient1)" stroke-width="2" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Floating hearts -->
+  <g opacity="0.7">
+    <path d="M450 50 C450 50, 430 70, 430 50 C430 35, 440 25, 450 35 C460 25, 470 35, 470 50 C470 70, 450 50, 450 50Z" fill="#ff4458" transform="rotate(15 450 50)"/>
+    <path d="M150 150 C150 150, 130 170, 130 150 C130 135, 140 125, 150 135 C160 125, 170 135, 170 150 C170 170, 150 150, 150 150Z" fill="#8B5CF6" transform="rotate(-20 150 150)"/>
+    <path d="M520 280 C520 280, 500 300, 500 280 C500 265, 510 255, 520 265 C530 255, 540 265, 540 280 C540 300, 520 280, 520 280Z" fill="#ff4458" transform="rotate(30 520 280)"/>
+  </g>
+  
+  <!-- Stars/sparkles -->
+  <g opacity="0.8">
+    <path d="M100 100 L105 110 L100 120 L95 110 Z M90 110 L100 110 M100 110 L110 110" stroke="url(#gradient1)" stroke-width="2" fill="none"/>
+    <path d="M500 350 L505 360 L500 370 L495 360 Z M490 360 L500 360 M500 360 L510 360" stroke="url(#gradient1)" stroke-width="2" fill="none"/>
+    <path d="M50 250 L55 260 L50 270 L45 260 Z M40 260 L50 260 M50 260 L60 260" stroke="#8B5CF6" stroke-width="2" fill="none"/>
+  </g>
+</svg>

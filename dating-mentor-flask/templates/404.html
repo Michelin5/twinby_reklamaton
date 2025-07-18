@@ -1,0 +1,39 @@
+
+{% extends "base.html" %}
+
+{% block title %}404 - Страница не найдена{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row min-vh-100 align-items-center">
+        <div class="col-lg-6 mx-auto text-center">
+            <div class="error-page">
+                <h1 class="display-1 fw-bold text-gradient">404</h1>
+                <h2 class="mb-4">Упс! Страница не найдена</h2>
+                <p class="lead text-muted mb-4">
+                    Похоже, вы заблудились в пространстве знакомств. 
+                    Страница, которую вы ищете, не существует или была перемещена.
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> На главную
+                    </a>
+                    <button onclick="history.back()" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+                
+                <div class="mt-5">
+                    <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="404" style="width: 200px; opacity: 0.5;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    animation: fadeIn 0.8s ease-out;
+}
+</style>
+{% endblock %}
