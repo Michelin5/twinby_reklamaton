@@ -93,3 +93,4 @@ if __name__ == "__main__":
 
     # Тест GeneralDatingAdvisor
     print("\nВопрос 1:", advisor.ask_question("Что делать если я боюсь быть отвергнутым?"))
+    print('AHAHAHAHAHAHAHHA')
