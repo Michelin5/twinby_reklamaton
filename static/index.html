@@ -7,15 +7,19 @@
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       height: 100vh;
+      background: #fdfdfd;
     }
     .sidebar {
-      width: 300px;
-      background: #f4f4f4;
+      width: 320px;
+      background: #ffffff;
       padding: 20px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
     .main {
       flex: 1;
@@ -24,24 +28,31 @@
     }
     .tabs {
       display: flex;
-      background: #eee;
+      background: #f0f0f0;
+      border-bottom: 1px solid #ccc;
     }
     .tab {
       padding: 10px 20px;
       cursor: pointer;
+      border-top: 2px solid transparent;
     }
     .tab.active {
       background: #fff;
-      border-bottom: 2px solid #000;
+      border-top: 2px solid #007BFF;
+      font-weight: bold;
     }
     .tab-content {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      background: #fafafa;
     }
-    textarea {
+    textarea, input[type="file"] {
       width: 100%;
-      height: 60px;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     .chat-box {
       height: 300px;
@@ -50,19 +61,29 @@
       padding: 10px;
       background: #fff;
       margin-bottom: 10px;
+      border-radius: 5px;
     }
     .chat-message {
       margin-bottom: 10px;
     }
     button {
-      margin-top: 5px;
+      padding: 10px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
     }
     .photo-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
       margin-top: 10px;
-    }
-    .photo-preview img {
-      max-width: 100%;
-      border-radius: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
@@ -71,13 +92,13 @@
     <h3>Твоя анкета</h3>
     <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
     <button onclick="analyzeProfile()">Анализ анкеты</button>
-    <div id="profile-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
+    <div id="profile-feedback" style="font-size: 0.9em;"></div>
     <hr>
     <h4>Фото профиля</h4>
-    <input type="file" id="photo" accept="image/*">
+    <input type="file" id="photo-input" accept="image/*">
     <button onclick="uploadPhoto()">Загрузить и проанализировать</button>
-    <div class="photo-preview" id="photo-preview"></div>
-    <div id="photo-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
+    <img id="photo-preview" class="photo-preview" style="display:none;"/>
+    <div id="photo-feedback" style="font-size: 0.9em;"></div>
   </div>
   <div class="main">
     <div class="tabs">
@@ -161,27 +182,25 @@
     }
 
     async function uploadPhoto() {
-      const fileInput = document.getElementById("photo");
+      const fileInput = document.getElementById("photo-input");
+      const photoFeedback = document.getElementById("photo-feedback");
       const preview = document.getElementById("photo-preview");
-      const feedback = document.getElementById("photo-feedback");
-
       const file = fileInput.files[0];
       if (!file) return;
 
       const formData = new FormData();
       formData.append("photo", file);
-
-      preview.innerHTML = "<i>Загружается...</i>";
-      feedback.innerText = "";
+      photoFeedback.innerText = "Анализируем фото...";
 
       const res = await fetch("/analyze-photo", {
         method: "POST",
-        body: formData
+        body: formData,
       });
-      const data = await res.json();
 
-      preview.innerHTML = `<img src="${data.photo_url}" alt="Фото анкеты">`;
-      feedback.innerText = data.photo_feedback;
+      const data = await res.json();
+      photoFeedback.innerText = data.photo_feedback;
+      preview.src = data.photo_url;
+      preview.style.display = 'block';
     }
   </script>
 </body>
