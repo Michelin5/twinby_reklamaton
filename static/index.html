@@ -57,8 +57,12 @@
     button {
       margin-top: 5px;
     }
-    input[type="file"] {
+    .photo-preview {
       margin-top: 10px;
+    }
+    .photo-preview img {
+      max-width: 100%;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -68,10 +72,11 @@
     <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
     <button onclick="analyzeProfile()">Анализ анкеты</button>
     <div id="profile-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
-
-    <h4 style="margin-top: 20px;">Загрузка фото</h4>
-    <input type="file" id="photo-input" accept="image/*">
-    <button onclick="uploadPhoto()">Анализ фото</button>
+    <hr>
+    <h4>Фото профиля</h4>
+    <input type="file" id="photo" accept="image/*">
+    <button onclick="uploadPhoto()">Загрузить и проанализировать</button>
+    <div class="photo-preview" id="photo-preview"></div>
     <div id="photo-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
   </div>
   <div class="main">
@@ -156,21 +161,26 @@
     }
 
     async function uploadPhoto() {
-      const input = document.getElementById("photo-input");
+      const fileInput = document.getElementById("photo");
+      const preview = document.getElementById("photo-preview");
       const feedback = document.getElementById("photo-feedback");
-      const file = input.files[0];
+
+      const file = fileInput.files[0];
       if (!file) return;
 
       const formData = new FormData();
       formData.append("photo", file);
-      feedback.innerText = "Анализируем фото...";
+
+      preview.innerHTML = "<i>Загружается...</i>";
+      feedback.innerText = "";
 
       const res = await fetch("/analyze-photo", {
         method: "POST",
-        body: formData,
+        body: formData
       });
-
       const data = await res.json();
+
+      preview.innerHTML = `<img src="${data.photo_url}" alt="Фото анкеты">`;
       feedback.innerText = data.photo_feedback;
     }
   </script>
