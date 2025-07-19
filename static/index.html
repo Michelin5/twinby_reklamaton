@@ -13,7 +13,7 @@
       background: #fdfdfd;
     }
     .sidebar {
-      width: 320px;
+      width: 400px;
       background: #ffffff;
       padding: 20px;
       box-shadow: 2px 0 10px rgba(0,0,0,0.1);
@@ -91,14 +91,11 @@
   <div class="sidebar">
     <h3>Твоя анкета</h3>
     <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
-    <button onclick="analyzeProfile()">Анализ анкеты</button>
-    <div id="profile-feedback" style="font-size: 0.9em;"></div>
-    <hr>
     <h4>Фото профиля</h4>
     <input type="file" id="photo-input" accept="image/*">
-    <button onclick="uploadPhoto()">Загрузить и проанализировать</button>
     <img id="photo-preview" class="photo-preview" style="display:none;"/>
-    <div id="photo-feedback" style="font-size: 0.9em;"></div>
+    <button onclick="analyzeAll()">Проанализировать</button>
+    <div id="analysis-results" style="font-size: 0.9em; margin-top: 15px;"></div>
   </div>
   <div class="main">
     <div class="tabs">
@@ -148,19 +145,45 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    async function analyzeProfile() {
+    async function analyzeAll() {
       const bio = document.getElementById("bio").value.trim();
-      const feedbackDiv = document.getElementById("profile-feedback");
-      if (!bio) return;
+      const fileInput = document.getElementById("photo-input");
+      const analysisDiv = document.getElementById("analysis-results");
+      const preview = document.getElementById("photo-preview");
 
-      feedbackDiv.innerText = "Анализируем...";
-      const res = await fetch("/analyze-profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bio }),
-      });
-      const data = await res.json();
-      feedbackDiv.innerText = data.feedback;
+      analysisDiv.innerHTML = "Анализируем...";
+
+      let photoFeedback = "";
+      if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append("photo", fileInput.files[0]);
+
+        const photoRes = await fetch("/analyze-photo", {
+          method: "POST",
+          body: formData
+        });
+        const photoData = await photoRes.json();
+        photoFeedback = photoData.photo_feedback;
+        preview.src = photoData.photo_url;
+        preview.style.display = 'block';
+      }
+
+      let textFeedback = "";
+      if (bio) {
+        const textRes = await fetch("/analyze-profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bio }),
+        });
+        const textData = await textRes.json();
+        textFeedback = textData.feedback;
+      }
+
+      analysisDiv.innerHTML = `
+        <div><strong>Описание:</strong><br>${textFeedback}</div>
+        <br>
+        <div><strong>Фото:</strong><br>${photoFeedback}</div>
+      `;
     }
 
     async function askCoach() {
@@ -179,28 +202,6 @@
       const data = await res.json();
       coachBox.innerHTML += `<div class="chat-message"><b>Коуч:</b> ${data.answer}</div>`;
       coachBox.scrollTop = coachBox.scrollHeight;
-    }
-
-    async function uploadPhoto() {
-      const fileInput = document.getElementById("photo-input");
-      const photoFeedback = document.getElementById("photo-feedback");
-      const preview = document.getElementById("photo-preview");
-      const file = fileInput.files[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append("photo", file);
-      photoFeedback.innerText = "Анализируем фото...";
-
-      const res = await fetch("/analyze-photo", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      photoFeedback.innerText = data.photo_feedback;
-      preview.src = data.photo_url;
-      preview.style.display = 'block';
     }
   </script>
 </body>

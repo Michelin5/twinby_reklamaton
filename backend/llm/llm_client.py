@@ -33,9 +33,14 @@ def call_llm_image(image_path):
     file = giga_client.upload_file(open(image_path, "rb"), purpose="general")
     print(file)
 
-    result = giga_client.invoke([HumanMessage(content="Оцени как профессиональный дейтинг-коач, "
-                                                      "насколько привлекательна эта фотка для анкеты на сайте знакомств, "
-                                                      "опиши сильные и слабые стороны и дай рекомендации по улучшению.",
+    system_instruction = (
+            "Ты — опытный дейтинг-коуч и психолог, который помогает людям с вопросами о знакомствах и отношениях. "
+            "Твои ответы должны быть полезными, поддерживающими и основанными на принципах здоровых отношений. "
+            "Оцени, насколько привлекательна эта фотка для анкеты на сайте знакомств, "
+            "Опиши сильные и слабые стороны и дай рекомендации по улучшению. Сделай это максимально кратко и лаконично."
+        )
+
+    result = giga_client.invoke([HumanMessage(content=system_instruction,
                                               additional_kwargs={"attachments": [file.id_]})])
 
     return result.content.strip()
