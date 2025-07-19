@@ -1,4 +1,4 @@
-from llm_client import call_llm
+from .llm_client import call_llm
 import json
 import os
 from datetime import datetime
@@ -140,19 +140,6 @@ class RobotGirlAgent:
 
         return response
 
-    def get_conversation_stats(self) -> Dict:
-        """Возвращает статистику разговора"""
-        total_messages = len(self.conversation_history)
-        user_messages = len([msg for msg in self.conversation_history if msg["role"] == "user"])
-        assistant_messages = len([msg for msg in self.conversation_history if msg["role"] == "assistant"])
-
-        return {
-            "total_messages": total_messages,
-            "user_messages": user_messages,
-            "assistant_messages": assistant_messages,
-            "conversation_started": self.conversation_history[0]["timestamp"] if self.conversation_history else None
-        }
-
     def clear_memory(self):
         """Очищает память разговора"""
         self.conversation_history = []
@@ -171,12 +158,6 @@ class RobotGirlAgent:
         print(f"Привет! Я {self.name}, {self.age} лет. Давай знакомиться! 😊")
         print("(Напиши 'Пока' чтобы закончить разговор)")
         print("-" * 50)
-
-        # Если есть история, показываем краткую статистику
-        stats = self.get_conversation_stats()
-        if stats["total_messages"] > 0:
-            print(f"📊 Продолжаем разговор (уже {stats['total_messages']} сообщений)")
-            print("-" * 50)
 
         while True:
             try:

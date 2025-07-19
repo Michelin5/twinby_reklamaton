@@ -1,5 +1,5 @@
 from typing import List, Dict
-from llm_client import call_llm
+from .llm_client import call_llm
 
 
 class LLMClient:
