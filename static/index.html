@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ИИ-ассистент знакомств</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -20,6 +21,7 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
+      overflow-y: auto;
     }
     .main {
       flex: 1;
@@ -85,17 +87,23 @@
       border-radius: 5px;
       border: 1px solid #ccc;
     }
+    .markdown-output {
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
   <div class="sidebar">
     <h3>Твоя анкета</h3>
-    <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
-    <h4>Фото профиля</h4>
     <input type="file" id="photo-input" accept="image/*">
     <img id="photo-preview" class="photo-preview" style="display:none;"/>
+    <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
     <button onclick="analyzeAll()">Проанализировать</button>
-    <div id="analysis-results" style="font-size: 0.9em; margin-top: 15px;"></div>
+    <div id="analysis-results" class="markdown-output" style="font-size: 0.9em;"></div>
   </div>
   <div class="main">
     <div class="tabs">
@@ -179,11 +187,8 @@
         textFeedback = textData.feedback;
       }
 
-      analysisDiv.innerHTML = `
-        <div><strong>Описание:</strong><br>${textFeedback}</div>
-        <br>
-        <div><strong>Фото:</strong><br>${photoFeedback}</div>
-      `;
+      const finalOutput = `**Описание анкеты:**\n\n${textFeedback}\n\n**Фото профиля:**\n\n${photoFeedback}`;
+      analysisDiv.innerHTML = marked.parse(finalOutput);
     }
 
     async function askCoach() {
