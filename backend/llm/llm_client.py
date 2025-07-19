@@ -2,6 +2,7 @@ from langchain_gigachat.chat_models import GigaChat
 from langchain_core.messages import HumanMessage, SystemMessage
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv(override=True)
 
@@ -10,7 +11,7 @@ GIGA_CREDENTIALS = os.environ.get("GIGACHAT_TOKEN")
 giga_client = None
 
 try:
-    giga_client = GigaChat(credentials=GIGA_CREDENTIALS, verify_ssl_certs=False, model="GigaChat-2")
+    giga_client = GigaChat(credentials=GIGA_CREDENTIALS, verify_ssl_certs=False, model="GigaChat-2-Max")
 except Exception as e:
     print(f"[ОШИБКА GigaChat Init] {e}")
 
@@ -26,8 +27,19 @@ def call_llm(prompt_text, system_instruction):
         print(f"Ошибка вызова GigaChat API: {e}")
         return f"[ОШИБКА API] {e}"
 
-def call_llm_image():
-    pass
+def call_llm_image(image_path):
+    if giga_client is None: return "[ОШИБКА API] Клиент GigaChat не инициализирован."
+
+    file = giga_client.upload_file(open(image_path, "rb"), purpose="general")
+    print(file)
+
+    result = giga_client.invoke([HumanMessage(content="Оцени как профессиональный дейтинг-коач, "
+                                                      "насколько привлекательна эта фотка для анкеты на сайте знакомств, "
+                                                      "опиши сильные и слабые стороны и дай рекомендации по улучшению.",
+                                              additional_kwargs={"attachments": [file.id_]})])
+
+    return result.content.strip()
+    # print(result.content.strip())
 
 if __name__ == "__main__":
     # Пример системной инструкции и промпта
@@ -38,3 +50,5 @@ if __name__ == "__main__":
     response = call_llm(prompt_text, system_instruction)
     print("\nФинальный ответ:")
     print(response)
+
+    call_llm_image('img.png')

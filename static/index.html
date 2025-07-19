@@ -57,6 +57,9 @@
     button {
       margin-top: 5px;
     }
+    input[type="file"] {
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -65,6 +68,11 @@
     <textarea id="bio" placeholder="Напиши свою анкету..."></textarea>
     <button onclick="analyzeProfile()">Анализ анкеты</button>
     <div id="profile-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
+
+    <h4 style="margin-top: 20px;">Загрузка фото</h4>
+    <input type="file" id="photo-input" accept="image/*">
+    <button onclick="uploadPhoto()">Анализ фото</button>
+    <div id="photo-feedback" style="margin-top: 10px; font-size: 0.9em;"></div>
   </div>
   <div class="main">
     <div class="tabs">
@@ -145,6 +153,25 @@
       const data = await res.json();
       coachBox.innerHTML += `<div class="chat-message"><b>Коуч:</b> ${data.answer}</div>`;
       coachBox.scrollTop = coachBox.scrollHeight;
+    }
+
+    async function uploadPhoto() {
+      const input = document.getElementById("photo-input");
+      const feedback = document.getElementById("photo-feedback");
+      const file = input.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("photo", file);
+      feedback.innerText = "Анализируем фото...";
+
+      const res = await fetch("/analyze-photo", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      feedback.innerText = data.photo_feedback;
     }
   </script>
 </body>
